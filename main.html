@@ -46,6 +46,30 @@
 
         </div>
     </section>
+    <section class="weather">
+        <div class="weatherWidget" ></div>
+
+        <script>
+            window.weatherWidgetConfig =  window.weatherWidgetConfig || [];
+            window.weatherWidgetConfig.push({
+                selector:".weatherWidget",
+                apiKey:"4ZVN3XMA8E2X2HT3TBTTSM8VN", //Sign up for your personal key
+                location:"Vienna, Austria", //Enter an address
+                unitGroup:"metric", //"us" or "metric"
+                forecastDays:7, //how many days forecast to show
+                title:"Vienna, Austria", //optional title to show in the
+                showTitle: true,
+                showConditions: true
+            });
+
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://www.visualcrossing.com/widgets/forecast-simple/weather-forecast-widget-simple.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    </section>
 </main>
 
 <script src="main.js"></script>
