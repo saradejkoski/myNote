@@ -8,6 +8,10 @@ window.addEventListener('load', () => {
 
         const task = input.value;
 
+        /*
+        Creates new div Element for adding the Tasks to the Task Bar.
+         */
+
         const task_el = document.createElement('div');
         task_el.classList.add('task');
 
@@ -26,6 +30,10 @@ window.addEventListener('load', () => {
 
         const task_actions_el = document.createElement('div');
         task_actions_el.classList.add('actions');
+
+        /*
+        Create Edit and Delete Button in the Task Bar for each Task.
+         */
 
         const task_edit_el = document.createElement('button');
         task_edit_el.classList.add('edit');
@@ -47,6 +55,25 @@ window.addEventListener('load', () => {
         /*
          Code for Buttons has to be written below
          */
+        /*
+        Edit Button:
+         */
+        task_edit_el.addEventListener('click', () => {
+            if (task_edit_el.innerText.toLowerCase() == "edit") {
+                task_input_el.removeAttribute("readonly");
+                task_input_el.focus();
+                task_edit_el.innerText = "Save";
+            } else {
+                task_input_el.setAttribute("readonly", "readoonly");
+                task_edit_el.innerText = "Edit";
+            }
+        })
+        /*
+        Delete Button:
+         */
+        task_delete_el.addEventListener('click', () => {
+            list_el.removeChild(task_el);
+        })
     });
 });
 
