@@ -64,7 +64,7 @@ window.addEventListener('load', () => {
                 task_input_el.focus();
                 task_edit_el.innerText = "Save";
             } else {
-                task_input_el.setAttribute("readonly", "readoonly");
+                task_input_el.setAttribute("readonly", "readonly");
                 task_edit_el.innerText = "Edit";
             }
         })
