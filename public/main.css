@@ -156,7 +156,6 @@ main {
     border-radius: 0.5rem;
     color: lightblue;
     font-size: 1rem;
-    margin: 0.5rem;
     padding: 0.25rem;
 }
 
@@ -172,32 +171,3 @@ main {
 }
 
 
-#registerButton{
-    position: absolute;
-    right:24rem;
-    top:7rem;
-}
-
-#loginButton{
-    position: absolute;
-    right:30rem;
-    top:7rem;
-}
-
-#passwordInput{
-    position: absolute;
-    right:35rem;
-    top:6.5rem;
-}
-
-#emailInput{
-    position: absolute;
-    right:48rem;
-    top:6.5rem;
-}
-
-#deleteSession{
-    position: absolute;
-    right:24rem;
-    top:6rem;
-}
