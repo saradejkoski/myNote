@@ -122,6 +122,8 @@ window.addEventListener('load', () => {
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "visible");
                 document.getElementById("newUser").style.setProperty('visibility', "hidden");
                 reloadNotes();
+                passwordInput.value = "";
+                emailInput.value = "";
             }else{
                 alert("Password Email falsch");
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
@@ -146,6 +148,8 @@ window.addEventListener('load', () => {
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "visible");
                 document.getElementById("newUser").style.setProperty('visibility', "hidden");
                 reloadNotes();
+                passwordInput.value = "";
+                emailInput.value = "";
             }else{
                 alert("Email bereits vorhanden");
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
