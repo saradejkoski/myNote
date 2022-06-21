@@ -11,7 +11,7 @@
 * {
     margin: 0;
     box-sizing: border-box;
-    font-family: Georgia;
+    font-family: Georgia, sans-serif;
 }
 
 body {
@@ -41,18 +41,17 @@ header h1{
 }
 
 input, button {
-    /* appearance: none;
-     border: none;
-     outline: none;
-     background: none; */
+    appearance: none;
+    border: none;
+    outline: none;
+    background: none;
 }
 
 #new-task-input {
-    flex: 1 1 0%;
+    flex: 1 1 0;
     background-color: var(--darker);
     padding: 1rem;
     border-radius: 1rem;
-    margin-right: 1rem;
     color: lightblue;
     font-size: 1.25rem;
 }
@@ -62,7 +61,6 @@ input, button {
 }
 
 #new-task-submit {
-    color: darkgreen;
     font-size: 1.25rem;
     font-weight: 700;
     background-image: linear-gradient(to right, var(--darker), var(--darker));
@@ -81,7 +79,7 @@ input, button {
 }
 
 main {
-    flex: 1 1 0%;
+    flex: 1 1 0;
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
@@ -91,7 +89,7 @@ main {
     padding: 1rem;
 }
 
-.task-list h2 {
+.task-list h2, #userLoggedIn h2 {
     font-size: 1.5rem;
     font-weight: 300;
     color: lightblue;
@@ -108,7 +106,7 @@ main {
 }
 
 .task .content {
-    flex: 1 1 0%;
+    flex: 1 1 0;
 }
 
 .task .content .text {
@@ -145,16 +143,61 @@ main {
     opacity: 0.6;
 }
 
-.task .actions .edit {
-    background-image: linear-gradient(to right, lightblue, darkgreen);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 .task .actions .delete {
     color: red;
 }
 
 #userLoggedIn, #newUser {
     visibility: hidden;
+}
+
+#emailInput, #passwordInput{
+    background-color: #1F2937;
+    border-radius: 0.5rem;
+    color: lightblue;
+    font-size: 1rem;
+    margin: 0.5rem;
+    padding: 0.25rem;
+}
+
+
+#registerButton, #loginButton, #deleteSession{
+    font-size: 1rem;
+    font-weight: 700;
+    background-image: linear-gradient(to right, var(--darker), var(--darker));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+
+#registerButton{
+    position: absolute;
+    right:24rem;
+    top:7rem;
+}
+
+#loginButton{
+    position: absolute;
+    right:30rem;
+    top:7rem;
+}
+
+#passwordInput{
+    position: absolute;
+    right:35rem;
+    top:6.5rem;
+}
+
+#emailInput{
+    position: absolute;
+    right:48rem;
+    top:6.5rem;
+}
+
+#deleteSession{
+    position: absolute;
+    right:24rem;
+    top:6rem;
 }

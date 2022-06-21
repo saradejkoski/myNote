@@ -27,7 +27,7 @@ const users = [
 let notes = [{
   userId:2,
   uuid:"smldfkjaÃ¶lsdkjfÃ¶alskdjfÃ¶alkds,f",
-  content:"Hallo Notiz"
+  content:"Homework"
 }];
 
 const app = express()
@@ -155,7 +155,7 @@ app.delete("/tasks",(req,res)=>{
   const { noteUuid } = req.body;
   if(userId != null && noteUuid != null){
     notes = notes.filter((item) => {
-      return !(item.uuid == noteUuid && item.userId == userId);
+      return !(item.uuid === noteUuid && item.userId === userId);
     });
     return res.send({status:true})
   }else{

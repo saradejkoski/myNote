@@ -17,7 +17,7 @@ window.addEventListener('load', () => {
             console.log(notes);
             console.log("BYE");
 
-            for(var notizIndex = 0; notizIndex < notes.length; notizIndex++){
+            for(let notizIndex = 0; notizIndex < notes.length; notizIndex++){
                 const task = notes[notizIndex].content;
                 const notizUuid = notes[notizIndex].uuid;
 
