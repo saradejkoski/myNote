@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-//const path = require('path')
+const path = require('path')
 
 const TWO_HOURS = 1000 * 60 * 60 * 2
 
@@ -17,16 +17,14 @@ const {
 const IN_PROD = NODE_ENV === 'production'
 
 const users = [
-  { id: 1, name: 'Alex', email: 'ale@gmail.com', password: 'secret' },
-  { id: 2, name: 'Max', email: 'max@gmail.com', password: 'secret' },
-  { id: 3, name: 'Tom', email: 'tom@gmail.com', password: 'secret' }
+  { id: 1, email: 'ale@gmail.com', password: 'secret' },
+  { id: 2, email: 'max@gmail.com', password: 'secret' },
+  { id: 3, email: 'tom@gmail.com', password: 'secret' }
 ]
 
 const app = express()
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
+app.use(bodyParser.json())
 
 app.use(session({
   name: SESS_NAME,
@@ -40,21 +38,8 @@ app.use(session({
   }
 }))
 
-const redirectLogin = (req, res, next) => {
-  if (!req.session.userId) {
-    res.redirect('/login')
-  } else {
-    next()
-  }
-}
+app.use("/", express.static(__dirname + '/public'));
 
-const redirectHome = (req, res, next) => {
-  if (req.session.userId) {
-    res.redirect('/home')
-  } else {
-    next()
-  }
-}
 
 app.use((req, res, next) => {
   const { userId } = req.session
@@ -65,77 +50,41 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/', (req, res) => {
-  const { userId } = req.session
+app.get("/getProfile",(req,res)=>{
+  const { userId } = req.session;
+  if(userId != null){
+    res.send(true);
+  }else{
+    res.send(false);
+  }
+});
 
-  res.send(`
-    <h1> Welcome! </h1>
-    ${userId ? `
-    <a href='/main'>Main</a>
-    <form method="post" action='/logout'>
-        <button>Logout</button>
-    </form>
-    ` : `
-    <a href='/login'>Login</a>
-    <a href='/register'>Register</a>
-    `}
-    `)
+app.get("/main",(req,res) => {
+  res.sendFile(__dirname + "/public/main.html");
+});
 
-})
+app.get('/',  (req, res) => {
+  res.sendFile(__dirname + "/public/main.html");
+});
 
-app.get('/home', redirectLogin, (req, res) => {
-  const { user } = res.locals
-
-  res.sendFile(process.cwd() + '/main.html');
-})
-
-app.get('/login', redirectHome, (req, res) => {
-
-  res.send(`
-     <h1>Login</h1>
-     <form method='post' action='/login'>
-     <input type='email' name='email' placeholder='Email' required/>
-     <input type='password' name='password' placeholder='Password' required/>
-     <input type='submit' />
-</form>
-<a href='/register'>Register</a>
-  `)
-
-})
-
-app.get('/register', redirectHome, (req, res) => {
-
-  res.send(`
-  <h1>Register</h1>
-  <form method='post' action='/register'>
-    <input type='name' name='name' placeholder='Name' required/>
-    <input type='email' name='email' placeholder='Email' required/>
-    <input type='password' name='password' placeholder='Password' required/>
-    <input type='submit' />
-  </form>
-  <a href='/login'>Login</a>
-    `)
-})
-
-app.post('/login', redirectHome, (req, res) => {
+app.post('/login', (req, res) => {
   const { email, password } = req.body
-
+  console.log(req.body);
   if (email && password) {
     const user = users.find(
       user => user.email === email && user.password === password)
     if (user) {
       req.session.userId = user.id
-      return res.redirect('/home')
+      return res.send({status:true});
     }
   }
+  return res.send({status:false});
+});
 
-  res.redirect('/login')
-})
+app.post('/register', (req, res) => {
+  const { email, password } = req.body;
 
-app.post('/register', redirectHome, (req, res) => {
-  const { name, email, password } = req.body
-
-  if (name && email && password) {
+  if (email && password) {
     const exists = users.some(
       user => user.email === email
     )
@@ -143,28 +92,26 @@ app.post('/register', redirectHome, (req, res) => {
     if (!exists) {
       const user = {
         id: users.length + 1,
-        name,
         email,
         password
       }
 
       users.push(user)
-
       req.session.userId = user.id
 
-      return res.redirect('/home')
+      return res.send({status:true})
     }
   }
-  res.redirect('/register')
+  return res.send({status:false})
 })
 
-app.post('/logout', redirectLogin, (req, res) => {
+app.delete('/session', (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      return res.redirect('/home')
+      return res.redirect('/')
     }
     res.clearCookie(SESS_NAME)
-    res.redirect('/login')
+    res.send("ok");
   })
 })
 

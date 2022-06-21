@@ -5,16 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyNote</title>
-    <script src="main.js"></script>
     <link rel="stylesheet" href="main.css" />
 </head>
 <body>
 
 <header>
     <h1>MyNote</h1>
-    <form method="post" action='/logout'>
-        <button>Logout</button>
-    </form>
+    <div id="userLoggedIn">
+        <h1>Hello and welcome!</h1>
+        <button id="deleteSession">Logout</button>
+    </div>
+    <div id="newUser">
+        <input type='email' name='email' placeholder='Email' id="emailInput" required/>
+        <input type='password' name='password' placeholder='Password' id="passwordInput" required/>
+        <button id="registerButton">Register</button>
+        <button id="loginButton">Login</button>
+    </div>
+
     <form id="new-task-form">
         <input
                 type="text"
@@ -50,27 +57,26 @@
         </div>
     </section>
     <section class="weather">
-        <div class="weatherWidget" ></div>
-
+        <div class="weatherWidget"></div>
         <script>
-            window.weatherWidgetConfig =  window.weatherWidgetConfig || [];
-            window.weatherWidgetConfig.push({
-                selector:".weatherWidget",
-                apiKey:"4ZVN3XMA8E2X2HT3TBTTSM8VN",
-                location:"Vienna, Austria",
-                unitGroup:"metric",
-                forecastDays:7,
-                title:"Vienna, Austria",
-                showTitle: true,
-                showConditions: true
-            });
+          window.weatherWidgetConfig =  window.weatherWidgetConfig || [];
+          window.weatherWidgetConfig.push({
+            selector:".weatherWidget",
+            apiKey:"4ZVN3XMA8E2X2HT3TBTTSM8VN",
+            location:"Vienna, Austria",
+            unitGroup:"metric",
+            forecastDays:7,
+            title:"Vienna, Austria",
+            showTitle: true,
+            showConditions: true
+          });
 
-            (function() {
-                var d = document, s = d.createElement('script');
-                s.src = 'https://www.visualcrossing.com/widgets/forecast-simple/weather-forecast-widget-simple.js';
-                s.setAttribute('data-timestamp', +new Date());
-                (d.head || d.body).appendChild(s);
-            })();
+          (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://www.visualcrossing.com/widgets/forecast-simple/weather-forecast-widget-simple.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
         </script>
     </section>
 </main>

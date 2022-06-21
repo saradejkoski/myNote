@@ -41,10 +41,10 @@ header h1{
 }
 
 input, button {
-    appearance: none;
-    border: none;
-    outline: none;
-    background: none;
+    /* appearance: none;
+     border: none;
+     outline: none;
+     background: none; */
 }
 
 #new-task-input {
@@ -155,3 +155,6 @@ main {
     color: red;
 }
 
+#userLoggedIn, #newUser {
+    visibility: hidden;
+}
