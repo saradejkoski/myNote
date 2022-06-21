@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
+const crypto = require("crypto");
+
 
 const TWO_HOURS = 1000 * 60 * 60 * 2
 
@@ -16,12 +18,17 @@ const {
 
 const IN_PROD = NODE_ENV === 'production'
 
-
 const users = [
   { id: 1, email: 'ale@gmail.com', password: 'secret' },
   { id: 2, email: 'max@gmail.com', password: 'secret' },
   { id: 3, email: 'tom@gmail.com', password: 'secret' }
 ]
+
+let notes = [{
+  userId:2,
+  uuid:"smldfkjaÃ¶lsdkjfÃ¶alskdjfÃ¶alkds,f",
+  content:"Hallo Notiz"
+}];
 
 const app = express()
 
@@ -46,7 +53,7 @@ app.use((req, res, next) => {
   const { userId } = req.session
   if (userId) {
     res.locals.user = users.find(
-      user => user.id === userId)
+        user => user.id === userId)
   }
   next()
 })
@@ -73,7 +80,7 @@ app.post('/login', (req, res) => {
   console.log(req.body);
   if (email && password) {
     const user = users.find(
-      user => user.email === email && user.password === password)
+        user => user.email === email && user.password === password)
     if (user) {
       req.session.userId = user.id
       return res.send({status:true});
@@ -87,7 +94,7 @@ app.post('/register', (req, res) => {
 
   if (email && password) {
     const exists = users.some(
-      user => user.email === email
+        user => user.email === email
     )
 
     if (!exists) {
@@ -116,6 +123,46 @@ app.delete('/session', (req, res) => {
   })
 })
 
+app.get("/tasks",(req,res)=>{
+  const { userId } = req.session;
+  if(userId != null){
+    let userNotes = notes.filter((notiz)=>{
+      return notiz.userId = userId;
+    });
+    res.send(userNotes);
+  }else{
+    res.send([]);
+  }
+});
+
+app.put("/tasks",(req,res)=>{
+  const { userId } = req.session;
+  const { noteContent } = req.body;
+  if(userId != null && noteContent != null){
+    notes.push({
+      uuid:crypto.randomBytes(20).toString('hex'),
+      content:noteContent,
+      userId:userId
+    });
+    return res.send({status:true})
+  }else{
+    return res.send({status:false})
+  }
+});
+
+app.delete("/tasks",(req,res)=>{
+  const { userId } = req.session;
+  const { noteUuid } = req.body;
+  if(userId != null && noteUuid != null){
+    notes = notes.filter((item) => {
+      return !(item.uuid == noteUuid && item.userId == userId);
+    });
+    return res.send({status:true})
+  }else{
+    return res.send({status:false})
+  }
+});
+
 app.listen(PORT, () => console.log(
-  `http://localhost:${PORT}`
+    `http://localhost:${PORT}`
 ))
