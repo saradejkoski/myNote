@@ -89,7 +89,7 @@ main {
     padding: 1rem;
 }
 
-.task-list h2, #userLoggedIn h2 {
+.task-list h2, #userLoggedIn h2, .weather h2 {
     font-size: 1.5rem;
     font-weight: 300;
     color: lightblue;
@@ -169,5 +169,6 @@ main {
     cursor: pointer;
     transition: 0.4s;
 }
+
 
 
