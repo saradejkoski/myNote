@@ -29,8 +29,15 @@ header {
     margin: 0 auto;
 }
 
-header h1{
+header h1 {
     font-size: 2.5rem;
+    font-weight: 300;
+    color: lightblue;
+    margin-bottom: 1rem;
+}
+
+header h2 {
+    font-size: 1.5rem;
     font-weight: 300;
     color: lightblue;
     margin-bottom: 1rem;
@@ -160,7 +167,7 @@ main {
 }
 
 
-#registerButton, #loginButton, #deleteSession{
+#registerButton, #loginButton, #deleteSession {
     font-size: 1rem;
     font-weight: 700;
     background-image: linear-gradient(to right, var(--darker), var(--darker));
@@ -168,6 +175,41 @@ main {
     -webkit-text-fill-color: transparent;
     cursor: pointer;
     transition: 0.4s;
+}
+
+body {
+    display: grid;
+    grid-template-areas:
+        "c1 c1"
+        "c1 c1"
+        "c2 c2"
+        "c3 c3"
+        "c3 c3";
+        height: 100%;
+}
+
+@media screen and (min-width: 500px) {
+    body {
+        display: grid;
+        grid-template-areas:
+            "c1 c1 c1"
+            "c2 c2 c2"
+            "c2 c2 c2"
+            "c3 c3 c3";
+            height: 100%;
+    }
+}
+
+header {
+    grid-area: c1;
+}
+
+main {
+    grid-area: c2;
+}
+
+section.weather {
+    grid-area: c3;
 }
 
 
