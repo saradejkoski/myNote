@@ -1,11 +1,10 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const session = require('express-session')
-const path = require('path')
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 const crypto = require("crypto");
 
 
-const TWO_HOURS = 1000 * 60 * 60 * 2
+const TWO_HOURS = 1000 * 60 * 60 * 2;
 
 const {
   PORT = 3000,
@@ -14,15 +13,15 @@ const {
   SESS_NAME = 'sid',
   SESS_SECRET = 'ssh!quiet,it\'asecret!',
   SEES_LIFETIME = TWO_HOURS
-} = process.env
+} = process.env;
 
-const IN_PROD = NODE_ENV === 'production'
+const IN_PROD = NODE_ENV === 'production';
 
 const users = [
   { id: 1, email: 'ale@gmail.com', password: 'secret' },
   { id: 2, email: 'max@gmail.com', password: 'secret' },
   { id: 3, email: 'tom@gmail.com', password: 'secret' }
-]
+];
 
 let notes = [{
   userId:2,
@@ -30,9 +29,9 @@ let notes = [{
   content:"Homework"
 }];
 
-const app = express()
+const app = express();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.use(session({
   name: SESS_NAME,
@@ -44,19 +43,19 @@ app.use(session({
     sameSite: true,
     secure: IN_PROD
   }
-}))
+}));
 
 app.use("/", express.static(__dirname + '/public'));
 
 
 app.use((req, res, next) => {
-  const { userId } = req.session
+  const { userId } = req.session;
   if (userId) {
     res.locals.user = users.find(
-        user => user.id === userId)
+        user => user.id === userId);
   }
-  next()
-})
+  next();
+});
 
 app.get("/getProfile",(req,res)=>{
   const { userId } = req.session;
@@ -76,13 +75,13 @@ app.get('/',  (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const { email, password } = req.body
+  const { email, password } = req.body;
   console.log(req.body);
   if (email && password) {
     const user = users.find(
-        user => user.email === email && user.password === password)
+        user => user.email === email && user.password === password);
     if (user) {
-      req.session.userId = user.id
+      req.session.userId = user.id;
       return res.send({status:true});
     }
   }
@@ -95,33 +94,33 @@ app.post('/register', (req, res) => {
   if (email && password) {
     const exists = users.some(
         user => user.email === email
-    )
+    );
 
     if (!exists) {
       const user = {
         id: users.length + 1,
         email,
         password
-      }
+      };
 
-      users.push(user)
-      req.session.userId = user.id
+      users.push(user);
+      req.session.userId = user.id;
 
-      return res.send({status:true})
+      return res.send({status:true});
     }
   }
-  return res.send({status:false})
-})
+  return res.send({status:false});
+});
 
 app.delete('/session', (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      return res.redirect('/')
+      return res.redirect('/');
     }
-    res.clearCookie(SESS_NAME)
+    res.clearCookie(SESS_NAME);
     res.send("ok");
-  })
-})
+  });
+});
 
 app.get("/tasks",(req,res)=>{
   const { userId } = req.session;
@@ -144,9 +143,9 @@ app.put("/tasks",(req,res)=>{
       content:noteContent,
       userId:userId
     });
-    return res.send({status:true})
+    return res.send({status:true});
   }else{
-    return res.send({status:false})
+    return res.send({status:false});
   }
 });
 
@@ -157,12 +156,12 @@ app.delete("/tasks",(req,res)=>{
     notes = notes.filter((item) => {
       return !(item.uuid === noteUuid && item.userId === userId);
     });
-    return res.send({status:true})
+    return res.send({status:true});
   }else{
-    return res.send({status:false})
+    return res.send({status:false});
   }
 });
 
 app.listen(PORT, () => console.log(
     `http://localhost:${PORT}`
-))
+));
