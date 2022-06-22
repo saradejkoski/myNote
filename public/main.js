@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     const list_el = document.querySelector("#tasks");
 
     setInterval(()=>{
-        reloadNotes()
+        reloadNotes();
     },2000);
 
     const reloadNotes = () => {
@@ -61,14 +61,14 @@ window.addEventListener('load', () => {
                     const xhttp = new XMLHttpRequest();
                     xhttp.onload = function() {
                         reloadNotes();
-                    }
+                    };
 
                     xhttp.open("DELETE", "tasks");
                     xhttp.setRequestHeader("Content-type", "application/json");
                     xhttp.send(JSON.stringify({noteUuid:notizUuid}));
-                })
+                });
             }
-        }
+        };
 
 
         xhttp.open("GET", "tasks");
@@ -85,7 +85,7 @@ window.addEventListener('load', () => {
         }else{
             document.getElementById("newUser").style.setProperty('visibility', "visible");
         }
-    }
+    };
 
 
     xhttp.open("GET", "getProfile");
@@ -103,7 +103,7 @@ window.addEventListener('load', () => {
         xhttp.onload = function() {
             document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
             document.getElementById("newUser").style.setProperty('visibility', "visible");
-        }
+        };
         xhttp.open("DELETE", "session");
         xhttp.send();
     });
@@ -129,7 +129,7 @@ window.addEventListener('load', () => {
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
                 document.getElementById("newUser").style.setProperty('visibility', "visible");
             }
-        }
+        };
         xhttp.open("POST", "login");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify({email,password}));
@@ -155,7 +155,7 @@ window.addEventListener('load', () => {
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
                 document.getElementById("newUser").style.setProperty('visibility', "visible");
             }
-        }
+        };
         xhttp.open("POST", "register");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify({email,password}));
@@ -168,7 +168,7 @@ window.addEventListener('load', () => {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
             reloadNotes();
-        }
+        };
         xhttp.open("PUT", "tasks");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify({noteContent:task}));
