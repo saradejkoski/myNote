@@ -25,12 +25,14 @@ const users = [
 
 let notes = [{
   userId:2,
-  uuid:"smldfkjaÃ¶lsdkjfÃ¶alskdjfÃ¶alkds,f",
+  uuid:"smldfkjalsdkjfalskdjfalkdsf",
   content:"Homework"
 }];
 
+// Needed for login.
 const app = express();
 
+// Body to Json
 app.use(bodyParser.json());
 
 app.use(session({
@@ -45,9 +47,11 @@ app.use(session({
   }
 }));
 
+// Building the path.
 app.use("/", express.static(__dirname + '/public'));
 
 
+// req.session to access data in session or to leave it there, local user gets an ID
 app.use((req, res, next) => {
   const { userId } = req.session;
   if (userId) {
@@ -57,6 +61,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Request Session, if there is a user ID Information will be sent.
 app.get("/getProfile",(req,res)=>{
   const { userId } = req.session;
   if(userId != null){
@@ -66,6 +71,7 @@ app.get("/getProfile",(req,res)=>{
   }
 });
 
+// Looks for main.html
 app.get("/main",(req,res) => {
   res.sendFile(__dirname + "/public/main.html");
 });
@@ -74,13 +80,17 @@ app.get('/',  (req, res) => {
   res.sendFile(__dirname + "/public/main.html");
 });
 
+// Requests email and password at Login.
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   if (email && password) {
+
+    // User email and written email and user password and written password are getting compared.
     const user = users.find(
         user => user.email === email && user.password === password);
     if (user) {
+      // if User exists body will be sent.
       req.session.userId = user.id;
       return res.send({status:true});
     }
@@ -95,7 +105,7 @@ app.post('/register', (req, res) => {
     const exists = users.some(
         user => user.email === email
     );
-
+    // if the email does not exist, a new user is created an id is incremented by 1.
     if (!exists) {
       const user = {
         id: users.length + 1,
@@ -103,6 +113,7 @@ app.post('/register', (req, res) => {
         password
       };
 
+      // pushes the new user with its parameters to our users Array.
       users.push(user);
       req.session.userId = user.id;
 
@@ -112,16 +123,21 @@ app.post('/register', (req, res) => {
   return res.send({status:false});
 });
 
+// Session gets destroyed -> Logout
 app.delete('/session', (req, res) => {
   req.session.destroy(err => {
     if (err) {
+      // redirects to main.html
       return res.redirect('/');
     }
+    // clear Cookies for completely deleting the Session.
     res.clearCookie(SESS_NAME);
     res.send("ok");
   });
 });
 
+
+// Method for saving the Notes to a particular User.
 app.get("/tasks",(req,res)=>{
   const { userId } = req.session;
   if(userId != null){
@@ -134,6 +150,7 @@ app.get("/tasks",(req,res)=>{
   }
 });
 
+// Creates uuid (universal unique id)-> every task gets its uuid for identification. Then gets pushed to Notes Array.
 app.put("/tasks",(req,res)=>{
   const { userId } = req.session;
   const { noteContent } = req.body;
@@ -149,6 +166,11 @@ app.put("/tasks",(req,res)=>{
   }
 });
 
+/*
+ Request session and body. Looks if there is a user ID and valid Note.
+ -> filters the notes while looking for the particular Note which is meant to be deleted
+ -> Note gets deleted.
+ */
 app.delete("/tasks",(req,res)=>{
   const { userId } = req.session;
   const { noteUuid } = req.body;

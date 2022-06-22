@@ -10,12 +10,12 @@ window.addEventListener('load', () => {
 
     const reloadNotes = () => {
         const xhttp = new XMLHttpRequest();
-        console.log("HALLO!");
+
         xhttp.onload = function() {
             list_el.innerHTML = "";
+            // Parse JSON to String so we can print it.
             const notes = JSON.parse(this.responseText);
-            console.log(notes);
-            console.log("BYE");
+
 
             for(let notizIndex = 0; notizIndex < notes.length; notizIndex++){
                 const task = notes[notizIndex].content;
@@ -65,12 +65,13 @@ window.addEventListener('load', () => {
 
                     xhttp.open("DELETE", "tasks");
                     xhttp.setRequestHeader("Content-type", "application/json");
+                    // When communicating content has to be parsed back to JSON.
                     xhttp.send(JSON.stringify({noteUuid:notizUuid}));
                 });
             }
         };
 
-
+        // GET Tasks after the previous was deleted.
         xhttp.open("GET", "tasks");
         xhttp.send();
     };
@@ -78,19 +79,23 @@ window.addEventListener('load', () => {
 
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
+        // variable if user is logged in, JSON to Text.
         var isLoggedIn = JSON.parse(this.responseText);
         if(isLoggedIn){
+            // If user gets logged in -> getElementByID(userLoggedIn)
             document.getElementById("userLoggedIn").style.setProperty('visibility', "visible");
             reloadNotes();
         }else{
+            // If not, the user goes to Registration.
             document.getElementById("newUser").style.setProperty('visibility', "visible");
         }
     };
 
-
+    // Logs completely in the profile.
     xhttp.open("GET", "getProfile");
     xhttp.send();
 
+    // Variables for Login and Registration. (from html)
     const emailInput = document.getElementById("emailInput");
     const passwordInput = document.getElementById("passwordInput");
 
@@ -98,6 +103,10 @@ window.addEventListener('load', () => {
     const registerButton = document.getElementById("registerButton");
     const logoutButton = document.getElementById("deleteSession");
 
+    /*
+     After Logout we want to see the first screen again, so we set the tag "userLoggedIn" to hidden
+     and the tag "newUser" to visible.
+     */
     logoutButton.addEventListener("click",() => {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
@@ -118,18 +127,21 @@ window.addEventListener('load', () => {
             console.log(JSON.parse(this.responseText).status);
             var isLoggedIn = JSON.parse(this.responseText).status;
             if(isLoggedIn){
+                // If Login is successful set "userLoggedIn" tag to visible and "newUser" tag to hidden.
                 alert("Willkommen!");
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "visible");
                 document.getElementById("newUser").style.setProperty('visibility', "hidden");
                 reloadNotes();
+                // After logging out email and password fields are empty.
                 passwordInput.value = "";
                 emailInput.value = "";
             }else{
-                alert("Password Email falsch");
+                alert("Password oder Email ist falsch!");
                 document.getElementById("userLoggedIn").style.setProperty('visibility', "hidden");
                 document.getElementById("newUser").style.setProperty('visibility', "visible");
             }
         };
+        // With POST method email and password are sent.
         xhttp.open("POST", "login");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify({email,password}));
@@ -163,15 +175,16 @@ window.addEventListener('load', () => {
 
 
     form.addEventListener('submit', (e) => {
+        // maintains from realoading the whole page when clicking on "Add Task"
         e.preventDefault();
         const task = input.value;
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
-            reloadNotes();
+            reloadNotes(); //-> responsible for creating the task
         };
         xhttp.open("PUT", "tasks");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify({noteContent:task}));
-        input.value = '';
+        input.value = ''; // -> to not have the same word in the task bar again after submitting.
     });
 });
