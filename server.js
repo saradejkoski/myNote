@@ -12,13 +12,16 @@ const {
 
   SESS_NAME = 'sid',
   SESS_SECRET = 'ssh!quiet,it\'asecret!',
+    //allows express-session to use it to encrypt the session id
   SEES_LIFETIME = TWO_HOURS
+    //maximum time of an end user sign on session
 } = process.env;
 
 const IN_PROD = NODE_ENV === 'production';
+// ensures that loggin is kept to a minimum, optimizing performance
 
 const users = [
-  { id: 1, email: 'ale@gmail.com', password: 'secret' },
+  { id: 1, email: 'alex@gmail.com', password: 'secret' },
   { id: 2, email: 'max@gmail.com', password: 'secret' },
   { id: 3, email: 'tom@gmail.com', password: 'secret' }
 ];
@@ -39,11 +42,15 @@ app.use(session({
   name: SESS_NAME,
   resave: false,
   saveUninitialized: false,
+  //forces a session to be saved back, --> false so that it does not be saved
   secret: SESS_SECRET,
   cookie: {
     maxAge: SEES_LIFETIME,
+    //sets time for when a cookie will be deleted
     sameSite: true,
+    //helps browsers to identify whether a cookie is allowed to be accessed or not
     secure: IN_PROD
+    // sets secure also to true, cookies are accepted if they are from the same origin
   }
 }));
 
@@ -176,7 +183,7 @@ app.delete("/tasks",(req,res)=>{
   const { noteUuid } = req.body;
   if(userId != null && noteUuid != null){
     notes = notes.filter((item) => {
-      return !(item.uuid === noteUuid && item.userId === userId);
+      return (item.uuid === noteUuid && item.userId === userId);
     });
     return res.send({status:true});
   }else{
